@@ -145,3 +145,6 @@ backlog_integration:
     post_on_review: true
     include_package_xml: true
     include_non_metadata: true
+    # Include the pull request URL so a reviewer reaches the code from the
+    # ticket. Resolved with `gh`; before the PR exists a compare link is used.
+    include_pr_link: true

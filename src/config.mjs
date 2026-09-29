@@ -115,6 +115,8 @@ const DEFAULTS = {
       post_on_review: true,
       include_package_xml: true,
       include_non_metadata: true,
+      // A reviewer should reach the code from the ticket in one click.
+      include_pr_link: true,
     },
   },
 };
