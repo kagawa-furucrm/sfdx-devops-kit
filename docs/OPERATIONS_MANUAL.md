@@ -195,7 +195,11 @@ Deliverables: 6 components (CustomField 2 / ApexClass 2 / LWC 1 / Flow 1)
 Backlog: commented on PROJ-142. No critical findings, so the status moved to 処理済み.
 ```
 
-The Backlog comment carries the findings **and** the delivered-metadata table.
+The Backlog comment carries the findings, the delivered-metadata table **and the
+pull request link** (resolved with `gh pr view`; before the PR exists it falls back
+to a compare URL, labelled as such). Run the skill again after opening the PR when
+you want the real PR URL recorded on the ticket.
+
 With even one critical finding the status does not move — fix and re-run.
 
 ## Step 6 — Pull request and CI

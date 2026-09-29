@@ -12,6 +12,7 @@ import {
   parseNameStatus,
   renderMarkdown,
   renderPackageXml,
+  resolvePullRequest,
 } from "../src/deliverables.mjs";
 import { extractTicketKey, statusFor, ticketContext } from "../src/backlog.mjs";
 import { validateConfig } from "../src/config.mjs";
@@ -210,4 +211,46 @@ test("ticketContext reports the mapping alongside the key", () => {
   assert.equal(context.status_mapping.review_ready, "処理済み");
   assert.equal(statusFor(config, "in_progress"), "処理中");
   assert.throws(() => statusFor(config, "archived"), /No Backlog status mapped/);
+});
+
+// ---------------------------------------------------------------------------
+// Pull request link — a reviewer should reach the code from the ticket.
+// ---------------------------------------------------------------------------
+
+test("an open pull request is rendered with its number and state", () => {
+  const markdown = renderMarkdown(deriveDeliverables([]), {
+    ticket: "PROJ-1",
+    pull_request: {
+      url: "https://github.com/acme/app/pull/128",
+      number: 128,
+      state: "open",
+      source: "gh",
+    },
+  });
+  assert.match(markdown, /- PR #128: https:\/\/github\.com\/acme\/app\/pull\/128 （open）/);
+});
+
+test("before a PR exists the compare link is labelled as not opened", () => {
+  const markdown = renderMarkdown(deriveDeliverables([]), {
+    ticket: "PROJ-1",
+    pull_request: {
+      url: "https://github.com/acme/app/compare/main...feature/PROJ-1?expand=1",
+      number: null,
+      state: "not opened",
+      source: "compare",
+    },
+  });
+  // The reader must not mistake a compare URL for a real pull request.
+  assert.match(markdown, /- PR: .*compare.*（未作成（比較リンク））/);
+});
+
+test("no PR information produces no PR line rather than an empty one", () => {
+  const markdown = renderMarkdown(deriveDeliverables([]), { ticket: "PROJ-1" });
+  assert.ok(!markdown.includes("- PR"));
+});
+
+test("resolvePullRequest never throws and always reports its source", () => {
+  const resolved = resolvePullRequest({ cwd: process.cwd() });
+  assert.ok(["gh", "compare", "none"].includes(resolved.source));
+  assert.equal(typeof resolved.url, "string");
 });

@@ -304,6 +304,7 @@ Backlog に投稿されるコメント（成果物一覧を含む）：
 
 - 課題キー: PROJ-142
 - ブランチ: `feature/PROJ-142-discount-approval`
+- PR: https://github.com/your-org/your-repo/pull/128 （open）
 - コンポーネント数: 6
 
 | 種別 (Type)              | API 名 (Name)                       | 変更 (Change) |
@@ -320,6 +321,11 @@ Backlog に投稿されるコメント（成果物一覧を含む）：
 
 `critical` が 1 件でもあればステータスは進みません。指摘を直して再度
 `/sfdx-review` を実行します。
+
+**PR リンクについて**: コメントには PR の URL が自動で入ります（`gh pr view` で
+解決）。PR 作成前は GitHub の比較リンクにフォールバックし「未作成（比較リンク）」
+と明示されます。チケットに実 PR の URL を残したい場合は、**PR 作成後にもう一度
+`/sfdx-review` を実行**してください（レビュー前後の 2 回投稿が推奨運用です）。
 
 ---
 

@@ -176,6 +176,7 @@ backlog_integration:
 | `mcp.tool_prefix`                   | `""`                     | Set when the server runs with `--prefix`                                             |
 | `deliverables.post_on_review`       | `true`                   | `/sfdx-review` posts the component list                                              |
 | `deliverables.include_package_xml`  | `true`                   | Include a per-ticket manifest                                                        |
+| `deliverables.include_pr_link`      | `true`                   | Add the PR URL (via `gh`, falling back to a compare link)                            |
 | `deliverables.include_non_metadata` | `true`                   | List test/CI/doc changes in a collapsed section                                      |
 
 ### Status ids
