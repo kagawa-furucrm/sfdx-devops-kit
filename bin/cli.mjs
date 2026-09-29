@@ -262,6 +262,7 @@ function cmdDeliverables({ flags }) {
       base,
       head,
       pull_request: pullRequest,
+      format: flags["comment-format"] ?? config.backlog_integration?.comment_format ?? "markdown",
     });
   } else {
     console.error(`✖ Unknown --format "${format}" (expected md, json or package-xml).`);
@@ -336,6 +337,7 @@ function cmdBacklog({ flags }) {
         base,
         head: flags.head ?? "HEAD",
         pull_request: pullRequest,
+        format: flags["comment-format"] ?? config.backlog_integration?.comment_format ?? "markdown",
       });
     } catch (error) {
       comment = "";
@@ -596,6 +598,7 @@ OPTIONS
   --base <ref>         Diff base for deliverables (default: origin/main)
   --head <ref>         Diff head for deliverables (default: HEAD)
   --format <f>         deliverables output: md | json | package-xml
+  --comment-format <f> Backlog comment dialect: markdown (default) | backlog
   --out <file>         Write output to a file instead of stdout
   --phase <p>          Backlog phase (backlog command): in_progress | review_ready | closed
   --config <file>      Use a specific config file

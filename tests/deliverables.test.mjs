@@ -254,3 +254,39 @@ test("resolvePullRequest never throws and always reports its source", () => {
   assert.ok(["gh", "compare", "none"].includes(resolved.source));
   assert.equal(typeof resolved.url, "string");
 });
+
+test("a git revision is not used as a compare base", () => {
+  // `--base HEAD~2` is valid for a diff but meaningless in a compare URL, so the
+  // fallback must not produce github.com/.../compare/HEAD~2...branch.
+  const resolved = resolvePullRequest({ cwd: process.cwd(), base: "HEAD~2" });
+  if (resolved.source === "compare") {
+    assert.ok(!resolved.url.includes("HEAD~2"), `compare URL leaked a revision: ${resolved.url}`);
+    assert.match(resolved.url, /\/compare\/[\w.\-/]+\.\.\./);
+  }
+});
+
+test("Backlog notation is emitted when the project is not set to Markdown", () => {
+  const entries = parseNameStatus(
+    [`M\t${PREFIX}/classes/OrderService.cls`, `A\t${PREFIX}/flows/Order_Followup.flow-meta.xml`].join("\n"),
+  );
+  const body = renderMarkdown(deriveDeliverables(entries), {
+    ticket: "PROJ-9",
+    format: "backlog",
+    pull_request: { url: "https://github.com/acme/app/pull/3", number: 3, state: "open", source: "gh" },
+  });
+
+  // Backlog notation: ** headings and a |…|h header row.
+  assert.match(body, /^\*\* 成果物/m);
+  assert.match(body, /\| 種別 \(Type\) \| API 名 \(Name\) \| 変更 \(Change\) \|h/);
+  assert.match(body, /\| ApexClass \| OrderService \| modified \|/);
+  assert.match(body, /- PR #3: https:\/\/github\.com\/acme\/app\/pull\/3/);
+  // Markdown artifacts must not leak into the notation dialect.
+  assert.ok(!body.includes("| --- |"), "no Markdown separator row");
+  assert.ok(!body.includes("`"), "no Markdown code spans");
+  assert.ok(!body.includes("<details>"), "no HTML");
+});
+
+test("the default dialect stays Markdown", () => {
+  const body = renderMarkdown(deriveDeliverables([]), { ticket: "PROJ-9" });
+  assert.match(body, /^## 成果物/m);
+});

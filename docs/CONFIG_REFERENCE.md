@@ -169,6 +169,7 @@ backlog_integration:
 | `project_key`                       | `""`                     | A key from another project is refused, so a stray match cannot move the wrong ticket |
 | `branch_pattern`                    | `([A-Z][A-Z0-9_]*-\d+)`  | Matched case-insensitively against the branch name                                   |
 | `status_mapping.*`                  | 処理中 / 処理済み / 完了 | All three are required                                                               |
+| `comment_format`                    | `markdown`               | `markdown` or `backlog`; must match the project's text formatting rule               |
 | `status_ids`                        | `{}`                     | Status **name → numeric id**, for custom statuses                                    |
 | `mcp.server_name`                   | `backlog`                | Name in `.mcp.json`                                                                  |
 | `mcp.runtime`                       | `docker`                 | `docker` or `npx`                                                                    |

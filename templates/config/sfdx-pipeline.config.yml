@@ -129,6 +129,11 @@ backlog_integration:
   # A project with custom statuses must list them here, otherwise the skills post
   # their comment and leave the status unchanged rather than guessing an id.
   status_ids: {}
+  # Backlog renders comments as Markdown or in Backlog notation, per project
+  # (Project settings → text formatting rule). A Markdown table posted into a
+  # Backlog-notation project shows literal pipe characters, so pick the dialect
+  # your project uses: markdown | backlog
+  comment_format: "markdown"
   # status_ids:
   #   レビュー待ち: 5
   #   リリース待ち: 6
